@@ -8,8 +8,8 @@ B=[[2],[2],[1]]
 #solve variables
 x = np.linalg.solve(A,B)
 
+#print(x)
 
-#for i in range(len(x)):
-#    print(f"x{i+1}:{x[i+1]}\n")
+for i in range(len(x)):
+    print(f"x{i+1}:{x[i]}")
 
-print(x)
