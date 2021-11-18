@@ -4,7 +4,7 @@
 def binary(imgGray, thresh=50):
     import cv2 as cv
 
-    ret, thresh_img = cv.threshold(imgGray, thresh, 255, cv.THRESH_BINARY)
+    ret, thresh_img = cv.threshold(img, thresh, 255, cv.THRESH_BINARY)
     # plt.imshow(thresh_img)
     # plt.title('thresh=0, maxval=255')
 
