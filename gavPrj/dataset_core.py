@@ -1,9 +1,10 @@
 import os
 import cv2 as cv
 import matplotlib.pyplot as plt
+import numpy as np
 
 
-def create_dataset():
+def create_dataset(datasetfilename):
 
     imgList = []
     labelList = []
@@ -12,54 +13,91 @@ def create_dataset():
 
     srcPath = 'rawdata'
 
+    # append all files in srcPath dir into imgList and labelList
+
     for fname in os.listdir(srcPath):
 
         filePath = os.path.join(srcPath, fname)
 
         img = cv.imread(filePath)
 
+        # spilt the last text in file name to save as label
+
         fname_no_ext = os.path.splitext(fname)[0]
         label = fname_no_ext[-1]
-
-
-        # label = fname[-1]
 
         imgList.append(img)
         labelList.append(label)
 
-    return imgList, labelList
+    # convert to imgList to numpy
+
+    images = np.array(imgList, dtype='object')
+    labels = np.array(labelList, dtype='object')
+
+    # save converted images and labels into compressed numpy zip file
+    np.savez_compressed(datasetfilename, images=images, labels=labels)
+
+    return True
+
+def displayImg():
+
+    
+
+    # for fname in os.listdir(srcPath):
+        
+
+    pass
 
 
 if __name__ == '__main__':
+    # save a dataset in numpy compressed format
 
-    imgList, labelList = create_dataset()
+    datasetfilename = 'tiredataset.npz'
 
-    img = imgList[0]
-    label = labelList[0]
+    if create_dataset(datasetfilename):
 
-    imgRGB = img[:, :, ::-1]
+        data = np.load(datasetfilename, allow_pickle=True)
+        imgList= data['images']
+        labelList= data['labels']
 
-    plt.imshow(imgRGB)
-    plt.title(label)
+        img = imgList[0]
+        label = labelList[0]
 
-    plt.show()
+        imgRGB = img[:, :, ::-1]
 
-    img = imgList[1]
-    label = labelList[1]
+        plt.imshow(imgRGB)
+        plt.title(label)
 
-    imgRGB = img[:, :, ::-1]
+        plt.show()
 
-    plt.imshow(imgRGB)
-    plt.title(label)
+    # imgList, labelList = create_dataset()
 
-    plt.show()
+    # img = imgList[0]
+    # label = labelList[0]
 
-    img = imgList[3]
-    label = labelList[3]
+    # imgRGB = img[:, :, ::-1]
 
-    imgRGB = img[:, :, ::-1]
+    # plt.imshow(imgRGB)
+    # plt.title(label)
 
-    plt.imshow(imgRGB)
-    plt.title(label)
+    # plt.show()
 
-    plt.show()
+    # img = imgList[1]
+    # label = labelList[1]
+
+    # imgRGB = img[:, :, ::-1]
+
+    # plt.imshow(imgRGB)
+    # plt.title(label)
+
+    # plt.show()
+
+    # img = imgList[3]
+    # label = labelList[3]
+
+    # imgRGB = img[:, :, ::-1]
+
+    # plt.imshow(imgRGB)
+    # plt.title(label)
+
+    # plt.show()
