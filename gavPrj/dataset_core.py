@@ -3,48 +3,49 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 import numpy as np
 
+srcPaths = ('dataset/Screenshot1','dataset/Screenshot2')
 
-def create_dataset(datasetfilename):
+datasetfilename = 'gavdataset.npz'
+
+def create_dataset(datasetfilename, srcPaths):
 
     imgList = []
     labelList = []
 
-    # read image path from folder
+    for srcPath in srcPaths:
 
-    srcPath = 'rawdata'
+        # append all files in srcPath dir into imgList and labelList
 
-    # append all files in srcPath dir into imgList and labelList
+        for fname in os.listdir(srcPath):
 
-    for fname in os.listdir(srcPath):
+            filePath = os.path.join(srcPath, fname)
 
-        filePath = os.path.join(srcPath, fname)
+            img = cv.imread(filePath)
 
-        img = cv.imread(filePath)
+            # spilt the last text in file name to save as label
 
-        # spilt the last text in file name to save as label
+            fname_no_ext = os.path.splitext(fname)[0]
+            # label = fname_no_ext[-1]
+            label = fname_no_ext
 
-        fname_no_ext = os.path.splitext(fname)[0]
-        label = fname_no_ext[-1]
+            imgList.append(img)
+            labelList.append(label)
+            
+         
 
-        imgList.append(img)
-        labelList.append(label)
+        # convert to imgList to numpy
 
-    # convert to imgList to numpy
+        images = np.array(imgList, dtype='object')
+        labels = np.array(labelList, dtype='object')
 
-    images = np.array(imgList, dtype='object')
-    labels = np.array(labelList, dtype='object')
+        # save converted images and labels into compressed numpy zip file
+        np.savez_compressed(datasetfilename, images=images, labels=labels)
 
-    # save converted images and labels into compressed numpy zip file
-    np.savez_compressed(datasetfilename, images=images, labels=labels)
-
-    return True
+        return True
 
 def displayImg():
 
-    
-
     # for fname in os.listdir(srcPath):
-        
 
     pass
 
@@ -52,13 +53,13 @@ def displayImg():
 if __name__ == '__main__':
     # save a dataset in numpy compressed format
 
-    datasetfilename = 'tiredataset.npz'
+    # datasetfilename = 'tiredataset.npz'
 
-    if create_dataset(datasetfilename):
+    if create_dataset(datasetfilename,srcPaths):
 
         data = np.load(datasetfilename, allow_pickle=True)
         imgList= data['images']
-        labelList= data['labels']
+        labelList= data['labels'] 
 
         img = imgList[0]
         label = labelList[0]
@@ -69,6 +70,9 @@ if __name__ == '__main__':
         plt.title(label)
 
         plt.show()
+    
+    print(imgList.shape)
+    print(labelList.shape)  
 
     # imgList, labelList = create_dataset()
 

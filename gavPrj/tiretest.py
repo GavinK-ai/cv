@@ -8,6 +8,8 @@ fileName = 'tiredataset.npz'
 
 if __name__ == '__main__':
 
+    
+
     # Load data from dataset
     data = np.load(fileName, allow_pickle=True)
 
@@ -16,6 +18,8 @@ if __name__ == '__main__':
 
     imgList = data['images']
     labelList = data['labels']
+
+
 
     img = imgList[0]
     label = labelList[0]
