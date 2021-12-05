@@ -470,3 +470,28 @@ GitHub.sublime-settings
 
 env*
 venv*
+<<<<<<< HEAD
+*.jpeg
+*.png
+gavPrj/dataset/gavindataset.zip
+*.zip
+*.jpg
+=======
+>>>>>>> parent of 731fdc9 (update)
+*.png
+*.npz
+*.npz
+*.rar
+gavPrj/gavdataset.npz
+*.npz
+*.png
+*.pb
+*.index
+*.data-00000-of-00001
+*.json
+*.txt
+*.pth
+*.dat
+*.npz
+*.avi
+*.jfif

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import os
 
 
-imageFile = 'Screenshot2.png'
+imageFile = 'Screenshot4.png'
 filePath = 'assets/'+imageFile
 
 if not os.path.exists('dataset'):
@@ -19,6 +19,8 @@ if not os.path.exists(folderPath):
 
 pointList = []
 pointList2 = []
+pointList3 = []
+pointList4 = []
 pointListOfList = []
 
 # Screenshot 1
@@ -45,11 +47,32 @@ pointList2.append(((324, 346), (460, 523), 'mahmuda'))
 pointList2.append(((694, 343), (840, 490), 'azureen'))
 pointListOfList.append(pointList2)
 
+pointList3.append(((353, 97), (527, 294), 'numan'))
+pointList3.append(((877, 155), (1022, 358), 'gavin'))
+# pointList2.append(((1120, 100), (1266, 269), 'saseendran'))
+# pointList2.append(((1101, 341), (1263, 485), 'inamul'))
+# pointList2.append(((1101, 556), (1240, 726), 'afiq'))
+pointList3.append(((872, 440), (1040, 655), 'goke'))
+# pointList2.append(((286, 538), (432, 652), 'jc'))
+pointList3.append(((1381, 140), (1566, 368), 'mahmuda'))
+pointList3.append(((346, 466), (531, 647), 'azureen'))
+pointListOfList.append(pointList3)
+
+pointList4.append(((375, 99), (550, 290), 'numan'))
+pointList4.append(((877, 155), (1055, 359), 'gavin'))
+# pointList2.append(((1120, 100), (1266, 269), 'saseendran'))
+# pointList2.append(((1101, 341), (1263, 485), 'inamul'))
+# pointList2.append(((1101, 556), (1240, 726), 'afiq'))
+pointList4.append(((899, 436), (1072, 643), 'goke'))
+# pointList2.append(((286, 538), (432, 652), 'jc'))
+pointList4.append(((1403, 137), (1584, 363), 'mahmuda'))
+pointList4.append(((362, 460), (559, 649), 'azureen'))
+pointListOfList.append(pointList4)
 count = 1
 
 #for plist in pointListOfList:
 
-for v in pointList2:
+for v in pointList4:
 
     (x1, y1), (x2, y2), label = v
 
