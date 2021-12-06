@@ -17,8 +17,7 @@ testImages, testLabels = create_data(test_data=True)
 # convert to grayscale
 # trainImages,testImages = greyscale(trainImages,testImages)
 
-# Normalized Image
-trainImages,testImages = normalization(trainImages, testImages)
+
 
 # Add noise to duplicate data
 #trainImages,trainLabels = add_noise(trainImages, trainLabels)
@@ -28,6 +27,9 @@ trainImages,trainLabels = rotate(trainImages, trainLabels)
 
 # Flip image horizontally and vertically
 trainImages,trainLabels = flip(trainImages, trainLabels)
+
+# Normalized Image
+trainImages,testImages = normalization(trainImages, testImages)
 
 input_shape = trainImages[0].shape
 
@@ -77,7 +79,7 @@ for iter in range(maxIterations):
     # save model if greater than threshold-accuracy 0.95
     if testAcc > thresholdAcc:
         # SavedModel format
-        version = f"cv_tire_tf_{(testAcc*100):.0f}"
+        version = f"cv_tire_tf_augmented_{(testAcc*100):.0f}"
 
         # for SavedModel format
         exportPath = os.path.join(modelDir, version)
