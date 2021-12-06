@@ -5,6 +5,9 @@ import os
 import time
 import cv2 as cv
 import copy
+from pathlib import Path
+import pandas as pd
+import glob
 
 img_size = 200
 
@@ -74,16 +77,43 @@ def add_noise(train_data, train_label):
 
 def greyscale(train_data, test_data):
 
-    train_data = cv.cvtColor(train_data, cv.COLOR_BGR2GRAY)
-    test_data = cv.cvtColor(test_data, cv.COLOR_BGR2GRAY)
+    gray_train_data_list = []
+    gray_test_data_list = []
+
+    for i in range(len(train_data)):
+        gry_traindata = train_data[i].copy()
+        gray_train_image = cv.cvtColor(gry_traindata, cv.COLOR_BGR2GRAY)
+        train_data = gray_train_data_list.append(gray_train_image)
+
+    for i in range(len(test_data)):   
+        gry_testdata = test_data[i].copy()
+        gray_test_image = cv.cvtColor(gry_testdata, cv.COLOR_BGR2GRAY)
+        test_data = gray_test_data_list.append(gray_test_image)
 
     return train_data, test_data
 
 
-def threshold():
+def threshold(train_data, test_data):
 
-    pass
+    thresh = 50
+    maxval = 255
 
+    thres_train_data_list = []
+    thres_test_data_list = []
+
+    for i in range(len(train_data)):
+        thres_traindata = train_data[i].copy()
+        ret, train_data_threshed = cv.threshold(
+            thres_traindata, thresh, maxval, cv.THRESH_BINARY)
+        train_data = gray_train_data_list.append(train_data_threshed)
+
+    for i in range(len(test_data)):  
+        thres_testdata = test_data[i].copy() 
+        ret, test_data_threshed = cv.threshold(
+            thres_testdata, thresh, maxval, cv.THRESH_BINARY)
+        test_data = gray_test_data_list.append(test_data_threshed)
+
+    return train_data, test_data
 
 def rotate(train_data, train_label):
 
@@ -113,3 +143,13 @@ def flip(train_data, train_label):
     train_label = np.concatenate((train_label, train_label))
 
     return train_data, train_label
+
+def process(data):
+    # For resnet model data import
+    path=Path(data)#converting the string to path
+    filepaths=list(path.glob(r"*/*.jpg"))#Going through all the subpaths 
+    labels=list(map(lambda x: os.path.split(os.path.split(x)[0])[1],filepaths))#Separating the label from filepath and storing it
+    df1=pd.Series(filepaths,name='filepaths').astype(str)
+    df2=pd.Series(labels,name='labels')
+    df=pd.concat([df1,df2],axis=1)#Making the dataframe
+    return df

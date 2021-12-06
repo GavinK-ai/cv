@@ -7,29 +7,31 @@ import tensorflow as tf
 from sklearn.model_selection import train_test_split
 import copy
 
-from data_process import create_data, normalization, add_noise, greyscale,rotate,flip
+from data_process import create_data, normalization, add_noise, greyscale, rotate, flip
 
 # Making function for create data from path
 
 trainImages, trainLabels = create_data(test_data=False)
 testImages, testLabels = create_data(test_data=True)
 
-# convert to grayscale
-# trainImages,testImages = greyscale(trainImages,testImages)
-
-
-
 # Add noise to duplicate data
 #trainImages,trainLabels = add_noise(trainImages, trainLabels)
 
 # Rotate image by 90 degrees clockwise
-trainImages,trainLabels = rotate(trainImages, trainLabels)
-
+trainImages, trainLabels = rotate(trainImages, trainLabels)
+print('Image rotated')
 # Flip image horizontally and vertically
-trainImages,trainLabels = flip(trainImages, trainLabels)
+trainImages, trainLabels = flip(trainImages, trainLabels)
+print('Image flip')
+# Convert to greyscale and apply thresholding
+#trainImages, testImages = greyscale(trainImages, testImages)
+print('Image greyscaled')
+# trainImages, testImages = threshold(trainImages, testImages)
+print('Image threshed')
 
 # Normalized Image
-trainImages,testImages = normalization(trainImages, testImages)
+trainImages, testImages = normalization(trainImages, testImages)
+print('Image Normalized')
 
 input_shape = trainImages[0].shape
 
@@ -41,7 +43,7 @@ lastTestAcc = 0.0
 testLoss = 0.0
 testAcc = 0.0
 modelDir = 'tf'
-epoch = 50
+epoch = 25
 
 total_tr_start_time = time.time()
 for iter in range(maxIterations):
@@ -96,6 +98,6 @@ for iter in range(maxIterations):
         # print("saved: ", exportPath)
 
         thresholdAcc = testAcc
-        
+
 total_tr_time_taken = time.time()-total_tr_start_time
-print(f'Total Simulation Time: {total_tr_time_taken:.3f}s')   
+print(f'Total Simulation Time: {total_tr_time_taken:.3f}s')

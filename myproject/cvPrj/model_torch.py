@@ -8,41 +8,6 @@ import numpy as np
 import random
 import cv2 as cv
 import time
-# datasetFileName = "../master_dataset.npz"
-
-
-# with np.load(datasetFileName, allow_pickle=True) as data:
-#     dataImages = data['images']
-#     dataLabels = data['labels'].astype('int64')
-#     dataLabelNames = data['labelnames']
-
-# desiredShape = (200, 200, 3)
-
-# N = len(dataImages)
-# shape = (N, desiredShape[0], desiredShape[1], desiredShape[2])
-
-# y = np.empty(shape, dtype='uint8')
-
-# for i in range(N):
-#     y[i] = cv.resize(dataImages[i], [200,200], interpolation=cv.INTER_NEAREST)
-
-# dataImages = y
-
-# dataImages = dataImages / 255.0
-
-# dataset = torch.tensor(dataImages)
-
-# all_data = []
-# for i in range(len(dataset)):
-#     all_data.append([dataset[i],dataLabels[i]])
-
-# random.shuffle(all_data)
-
-# train_split = int(len(all_data)*0.75)
-# test_spilt = len(all_data)-train_split
-# training_data, test_data = torch.utils.data.random_split(all_data,[train_split,test_spilt])
-
-# classes = {0: 'afiq', 1: 'azureen', 2: 'gavin', 3: 'goke',  4: 'inamul', 5: 'jincheng', 6: 'mahmuda', 7: 'numan', 8: 'saseendran'}
 
 batch_size = 30
 
