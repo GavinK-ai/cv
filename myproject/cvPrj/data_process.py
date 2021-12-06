@@ -6,7 +6,7 @@ import time
 import cv2 as cv
 import copy
 
-img_size = 250
+img_size = 200
 
 def create_data(test_data=False):
     
@@ -79,3 +79,21 @@ def greyscale(train_data, test_data):
 def threshold():
 
     pass
+
+def rotate(train_data, train_label):
+
+    rot_traindata = copy.deepcopy(train_data)
+    rot_traindata = cv.rotate(rot_traindata,  cv.ROTATE_90_CLOCKWISE)
+    train_data = np.concatenate((train_data, rot_traindata))
+    train_label = np.concatenate((train_label, train_label))
+
+    return train_data, train_label
+
+def flip(train_data, train_label):
+
+    flip_traindata = copy.deepcopy(train_data)
+    flip_traindata = cv.flip(flip_traindata, -1)
+    train_data = np.concatenate((train_data, flip_traindata))
+    train_label = np.concatenate((train_label, train_label))
+    
+    return train_data, train_label

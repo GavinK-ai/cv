@@ -7,7 +7,7 @@ import tensorflow as tf
 from sklearn.model_selection import train_test_split
 import copy
 
-from data_process import create_data, normalization, add_noise, greyscale
+from data_process import create_data, normalization, add_noise, greyscale,rotate,flip
 
 # Making function for create data from path
 
@@ -21,8 +21,13 @@ testImages, testLabels = create_data(test_data=True)
 trainImages,testImages = normalization(trainImages, testImages)
 
 # Add noise to duplicate data
-trainImages,trainLabels = add_noise(trainImages, trainLabels)
-trainImages,trainLabels = add_noise(trainImages, trainLabels)
+#trainImages,trainLabels = add_noise(trainImages, trainLabels)
+
+# Rotate image by 90 degrees clockwise
+trainImages,trainLabels = rotate(trainImages, trainLabels)
+
+# Flip image horizontally and vertically
+trainImages,trainLabels = flip(trainImages, trainLabels)
 
 input_shape = trainImages[0].shape
 
