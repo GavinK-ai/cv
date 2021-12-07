@@ -74,8 +74,6 @@ model.compile(
     metrics=['accuracy']
 )
 
-# device = "cuda" if torch.cuda.is_available() else "cpu"
-# model.to(device)
 
 mo_fit = model.fit(train_image, epochs=EPOCHS)
 
