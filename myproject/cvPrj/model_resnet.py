@@ -20,12 +20,16 @@ from data_process import (add_noise, create_data, flip, greyscale,
                           normalization, rotate, process)
 
 
-train_path = 'dataset/training_data'
+
+train_path = 'dataset/training_data_aug'
 test_path = 'dataset/testing_data'
 
 # create dataset
 df_train = process(train_path)
 df_test = process(test_path)
+
+# add augmented train data
+
 
 # define parameters
 EPOCHS = 10
@@ -65,6 +69,7 @@ inputs = pretrained_model.input
 
 x = Dense(120, activation='relu')(pretrained_model.output)
 x = Dense(120, activation='relu')(x)  # adding some custom layers of our coice
+x = Dense(120, activation='relu')(x)
 
 outputs = Dense(2, activation='sigmoid')(x)
 # output choice
@@ -81,19 +86,23 @@ mo_fit = model.fit(train_image, epochs=EPOCHS)
 
 train_acc = mo_fit.history
 
+
 pd.DataFrame(mo_fit.history)[['accuracy']].plot()
 plt.title("Train Accuracy")
 plt.show()
-
+plt.imsave('Training Accuracy.png')
 
 pd.DataFrame(mo_fit.history)[['loss']].plot()
 plt.title("Train Loss")
 plt.show()
+plt.imsave('Training Loss.png')
+
 
 print('Test Accuracy')
 eval_result = model.evaluate(test_image)
 
 
-savedFile = f'resnet/cv_image_resnet_{(eval_result[1]*100):.0f}.pt'
+savedFile = f'resnet_aug/cv_image_resnet_{(eval_result[1]*100):.0f}.pt'
 model.save(savedFile)
 print("Export Path = "+savedFile)
+
