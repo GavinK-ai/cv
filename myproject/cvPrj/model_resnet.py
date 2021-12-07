@@ -23,14 +23,17 @@ from data_process import (add_noise, create_data, flip, greyscale,
 train_path = 'dataset/training_data'
 test_path = 'dataset/testing_data'
 
+# create dataset
 df_train = process(train_path)
 df_test = process(test_path)
 
+# define parameters
 EPOCHS = 10
 BATCH_SIZE = 32
 RANDOM_SEED = 42
 thres_acc = 0.75
 
+# generating images
 train_generator = ImageDataGenerator(preprocessing_function=preprocess_input)
 test_generator = ImageDataGenerator(preprocessing_function=preprocess_input)
 
@@ -74,12 +77,9 @@ model.compile(
     metrics=['accuracy']
 )
 
-
 mo_fit = model.fit(train_image, epochs=EPOCHS)
 
 train_acc = mo_fit.history
-
-
 
 pd.DataFrame(mo_fit.history)[['accuracy']].plot()
 plt.title("Train Accuracy")

@@ -24,9 +24,9 @@ print('Image rotated')
 trainImages, trainLabels = flip(trainImages, trainLabels)
 print('Image flip')
 # Convert to greyscale and apply thresholding
-#trainImages, testImages = greyscale(trainImages, testImages)
+trainImages, testImages = greyscale(trainImages, testImages)
 print('Image greyscaled')
-# trainImages, testImages = threshold(trainImages, testImages)
+trainImages, testImages = threshold(trainImages, testImages)
 print('Image threshed')
 
 # Normalized Image

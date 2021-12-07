@@ -81,12 +81,12 @@ def greyscale(train_data, test_data):
     gray_test_data_list = []
 
     for i in range(len(train_data)):
-        gry_traindata = train_data[i].copy()
+        gry_traindata = copy.deepcopy(train_data)
         gray_train_image = cv.cvtColor(gry_traindata, cv.COLOR_BGR2GRAY)
         train_data = gray_train_data_list.append(gray_train_image)
 
     for i in range(len(test_data)):   
-        gry_testdata = test_data[i].copy()
+        gry_testdata = copy.deepcopy(test_data)
         gray_test_image = cv.cvtColor(gry_testdata, cv.COLOR_BGR2GRAY)
         test_data = gray_test_data_list.append(gray_test_image)
 
@@ -102,13 +102,13 @@ def threshold(train_data, test_data):
     thres_test_data_list = []
 
     for i in range(len(train_data)):
-        thres_traindata = train_data[i].copy()
+        thres_traindata = copy.deepcopy(train_data)
         ret, train_data_threshed = cv.threshold(
             thres_traindata, thresh, maxval, cv.THRESH_BINARY)
         train_data = gray_train_data_list.append(train_data_threshed)
 
     for i in range(len(test_data)):  
-        thres_testdata = test_data[i].copy() 
+        thres_testdata = copy.deepcopy(test_data) 
         ret, test_data_threshed = cv.threshold(
             thres_testdata, thresh, maxval, cv.THRESH_BINARY)
         test_data = gray_test_data_list.append(test_data_threshed)
