@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload</title>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+
+    <hr />
+    <form method="post">
+        <div>
+            <label for="name" />
+            <input type = 'text' id="name" name='name' placeholder = "Your Name" />   
+        </div>
+        <div>
+            <label for="pix" />
+            <input type = 'file' id="pix" name='pix' placeholder = "Your Pix" />   
+        </div>
+        <div>
+            <input type = 'submit' value="Submit" />
+        </div>
+        
+    </form>
+    <p>
+        {{name}}
+    </p>
+    <p>
+        {{message}}
+    </p>
+</body>
+</html>
