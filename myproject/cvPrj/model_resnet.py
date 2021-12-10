@@ -32,10 +32,9 @@ df_test = process(test_path)
 
 
 # define parameters
-EPOCHS = 10
+EPOCHS = 20
 BATCH_SIZE = 32
 RANDOM_SEED = 42
-thres_acc = 0.75
 
 # generating images
 train_generator = ImageDataGenerator(preprocessing_function=preprocess_input)
@@ -57,26 +56,26 @@ test_image = test_generator.flow_from_dataframe(dataframe=df_test,
                                                 random_seed=RANDOM_SEED
                                                 )
 
-# pretrained_model = ResNet50(
-#     input_shape=(224, 224, 3),
-#     include_top=False,
-#     weights='imagenet',
-#     pooling='max'
-# )
-pretrained_model = ResNet50V2(
+pretrained_model = ResNet50(
     input_shape=(224, 224, 3),
     include_top=False,
     weights='imagenet',
-    pooling='max',
-    classifier_activation="softmax"
+    pooling='max'
 )
+# pretrained_model = ResNet50V2(
+#     input_shape=(224, 224, 3),
+#     include_top=False,
+#     weights='imagenet',
+#     pooling='max',
+# )
 pretrained_model.trainable = False  # We don't want to train again the resnet
 
 inputs = pretrained_model.input
 
 x = Dense(120, activation='relu')(pretrained_model.output)
-#x = Dense(120, activation='relu')(x)  # adding some custom layers of our coice
-#x = Dense(120, activation='relu')(x)
+x = Dense(120, activation='relu')(x)  # adding some custom layers of our coice
+x = Dense(120, activation='relu')(x)
+x = Dense(120, activation='relu')(x)
 
 outputs = Dense(2, activation='sigmoid')(x)
 # output choice
@@ -109,7 +108,7 @@ print('Test Accuracy')
 eval_result = model.evaluate(test_image)
 
 
-savedFile = f'resnetV2_aug/cv_image_resnetV2_{(eval_result[1]*100):.0f}.pt'
+savedFile = f'resnet_aug/cv_image_resnet_{(eval_result[1]*100):.0f}.pt'
 model.save(savedFile)
 print("Export Path = "+savedFile)
 

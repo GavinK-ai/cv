@@ -1,8 +1,13 @@
+import os
+from werkzeug.utils import secure_filename
+from flask import Flask, flash, request, redirect, url_for
 from PIL import Image
-from flask import Flask, request, make_response, jsonify, render_template
+import io
+import base64
+import mimetypes
+from flask import Flask, request, make_response, jsonify, render_template, redirect, url_for
 import numpy as np
 import cv2 as cv
-
 app = Flask(__name__)
 
 
@@ -149,30 +154,132 @@ def all(id):
     }), 200
 
 
-@app.route('/api/cv/upload', methods=['GET', 'POST', 'PUT', 'DELETE'])
-def upload():
-    title = 'Please upload your image'
+# @app.route('/api/cv/upload', methods=['GET', 'POST', 'PUT', 'DELETE'])
+# def upload():
+#     title = 'Please upload your image'
     
-    name = ''
+#     name = ''
 
+#     if request.method == 'POST':
+#         message=''
+#         title += ': POST'
+#         name = request.form['name']
+#         message += name
+#         pix = request.form['pix']
+#         message += pix
+
+#         pixFile = request.files['pix']
+#     elif request.method == 'PUT':
+#         title += ': PUT'
+#     elif request.method == 'DELETE':
+#         title += ': DELETE'
+#     else:
+#         title += ': GET'
+
+#     return render_template('upload.html', title = title, message = message)
+
+UPLOAD_FOLDER = r'C:\SDK\Perantis\Perantis\cv\gavPrj2\static\uploads'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+save_mode = 0  # 1001
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/api/cv/upload', methods=['GET', 'POST'])
+def upload_file():
+    # get querystring
+    filename = '' if request.args.get(
+        'filename') is None else request.args.get('filename')
+    uri = '' if request.args.get('uri') is None else request.args.get('uri')
+    uri2 = '' if request.args.get('uri2') is None else request.args.get('uri2')
+    #
     if request.method == 'POST':
-        message=''
-        title += ': POST'
-        name = request.form['name']
-        message += name
-        pix = request.form['pix']
-        message += pix
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
 
-        pixFile = request.files['pix']
-    elif request.method == 'PUT':
-        title += ': PUT'
-    elif request.method == 'DELETE':
-        title += ': DELETE'
-    else:
-        title += ': GET'
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
 
-    return render_template('upload.html', title = title, message = message)
-    
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+
+            filePath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            root, ext = os.path.splitext(filename)
+            print(root, ext)
+            ext = ext.lower()
+            ext = '.jpeg' if ext == '.jpg' else ext
+
+            if save_mode == 0:
+                file.save(filePath)
+                uri = f'/static/uploads/{filename}'
+            else:
+                f = file.read()
+                print('file-len', len(f))
+                imgArray = np.frombuffer(f, np.uint8)
+
+                # create image
+                img = cv.imdecode(imgArray, cv.IMREAD_COLOR)
+
+                if save_mode == 1000:
+                    # write image to path
+                    cv.imwrite(filePath, img)
+                    uri = f'/static/uploads/{filename}'
+
+                mime = mimetypes.types_map[ext]
+                if save_mode == 1010:
+                    # transform to base64 url
+                    # 1
+                    uri = to_base64_uri_pil(img, ext, mime)
+
+                if save_mode == 1001:
+                    # 2
+                    uri = to_base64_uri(img, ext, mime)
+
+            return redirect(url_for('upload_file', uri=uri))
+
+    return f'''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>      
+    </form>
+    <img src="{uri}" />
+    '''
+
+def to_base64_uri_pil(img, ext, mime):
+    imgRGB = img[:, :, ::-1]
+    imgPIL = Image.fromarray(imgRGB)
+    buff = io.BytesIO()
+
+    imgFormat = ext[1:]
+    print(imgFormat)
+
+    imgPIL.save(buff, format=imgFormat)
+    imgBase64 = base64.b64encode(buff.getvalue()).decode("utf-8")
+
+    uri = f"data:{mime};base64,{imgBase64}"
+    return uri
+
+
+def to_base64_uri(img, ext, mime):
+    retval, buffer = cv.imencode(ext, img)
+    imgBase64_2 = base64.b64encode(buffer).decode("utf-8")
+
+    uri2 = f"data:{mime};base64,{imgBase64_2}"
+    return uri2
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
