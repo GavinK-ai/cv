@@ -9,6 +9,9 @@ import random
 import cv2 as cv
 import time
 
+train_path = 'dataset/training_data_aug'
+test_path = 'dataset/testing_data'
+
 batch_size = 30
 
 # Create data loaders.
